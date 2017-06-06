@@ -38,8 +38,8 @@ if (token) {
 }
 
 /**
- * 	Babel polyfill
- *  Doc:	https://babeljs.io/docs/usage/polyfill/
+ * Babel polyfill
+ * Doc:	https://babeljs.io/docs/usage/polyfill/
  */
 
  import 'babel-polyfill'

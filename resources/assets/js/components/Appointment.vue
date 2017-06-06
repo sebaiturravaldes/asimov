@@ -6,7 +6,7 @@
 
 				<div class="panel-body">
 					<div class="row">
-						<div class="col-md-6">
+						<div class="col-xs-12 col-md-6">
 							
 							<!-- Datepicker Component -->
 							<datepicker v-model="state.date" 
@@ -15,9 +15,8 @@
 							:disabled="state.disabled" 
 							:inline="true" 
 							language="es"></datepicker>
-
 						</div>
-						<div class="col-md-6">
+						<div class="col-xs-offset-2 col-xs-8 col-md-offset-1 col-md-4">
 							
 							<!-- Spinner loading -->
 							<spinner v-show="loading"></spinner>
@@ -58,12 +57,12 @@
   */
   var moment = require('moment')
 
- export default {
- 	components:{
- 		Datepicker,
- 	},
- 	data() {
- 		return {
+  export default {
+    components:{
+     Datepicker,
+   },
+   data() {
+     return {
   			/**
   			 * loading, is used from Spinner component
   			 * @type {Boolean}
@@ -101,16 +100,16 @@
  			 * state, is used for Datepicker component
  			 * @type {Object}
  			 */
- 			state: {
- 				disabled: {
- 					to: new Date(moment().subtract(1, 'days').format('YYYY-MM-DD')),
- 					days: [6,0],
- 				}
- 			}
- 		}
- 	},
+       state: {
+         disabled: {
+          to: new Date(moment().format('YYYY-MM-DD')),
+          days: [6,0],
+        }
+      }
+    }
+  },
 
- 	methods: {
+  methods: {
  		/**
  		 * selectedDay()
  		 * is activate with selected event in Datepicker component
@@ -172,32 +171,33 @@
  		  * 
  		  * @param  {Object} hour contain time, period in state (available or not)
  		  */
- 		 selectedTime(hour) {
- 		 	const self = this
+      selectedTime(hour) {
+       const self = this
 
- 		 	SweetAlert({
- 		 		title: "Appointment",
- 		 		text: "Please enter your email:",
- 		 		type: "input",
- 		 		showCancelButton: true,
- 		 		closeOnConfirm: false,
- 		 		animation: "slide-from-top",
- 		 		inputPlaceholder: "my@example.com"
- 		 	},
- 		 	function(inputValue){
- 		 		if (inputValue === false) return false
+       SweetAlert({
+        title: "Appointment",
+        text: "Please enter your email:",
+        type: "input",
+        showCancelButton: true,
+        closeOnConfirm: false,
+        animation: "slide-from-top",
+        inputPlaceholder: "my@example.com"
+      },
+      function(inputValue){
+        if (inputValue === false) return false
 
  				// Email regex used to validate email formats.
  				// sourte: https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/email
- 				var re = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/
+ 				// var re = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/
 
  				if (inputValue === "") {
  					swal.showInputError("You need to write something!")
  					return false
- 				}else if(!re.test(inputValue)){
- 					swal.showInputError("invalid email!")
- 					return false
  				}
+        // else if(!re.test(inputValue)){
+ 				// 	swal.showInputError("invalid email!")
+ 				// 	return false
+ 				// }
  				
  				axios.post('appointment', {
  					date_appointment: moment(self.state.date).format('YYYY-MM-DD'),
@@ -217,61 +217,59 @@
             })
            }
 
-          }else{
-            console.log(errors)
-          }
+         }else{
+          console.log(errors)
+        }
 
- 					return false
- 				})
+        return false
+      })
  			})
- 		 },
+     },
 
  		 /**
  		  * createSchelude()
  		  * This method allows to load with data the array of objects of the agenda in his office hours.
- 		  * 
- 		  * @return {[type]} [description]
  		  */
- 		 createSchelude() {
- 		 	let obj        = {}
- 		 	let period     = ''
- 		 	let time 	   = ''
- 		 	let start_time = this.timePicker.start_time.time
- 		 	let end_time   = this.timePicker.end_time.time
+      createSchelude() {
+        let obj        = {}
+        let period     = ''
+        let time       = ''
+        let start_time = this.timePicker.start_time.time
+        let end_time   = this.timePicker.end_time.time
 
- 		 	if (this.timePicker.end_time.time < 12 && this.timePicker.end_time.period.toLowerCase() == 'pm') {
- 		 		end_time += 12
- 		 	}
+        if (this.timePicker.end_time.time < 12 && this.timePicker.end_time.period.toLowerCase() == 'pm') {
+          end_time += 12
+        }
 
- 		 	for (var i = start_time; i <= end_time; i++) {
- 		 		period = (i < 12) ? 'am' : 'pm'
- 		 		time = (i < 10) ? '0' + i : i
- 		 		time += ':00:00'
+        for (var i = start_time; i <= end_time; i++) {
+          period = (i < 12) ? 'am' : 'pm'
+          time   = (i < 10) ? '0' + i : i
+          time   += ':00:00'
 
- 		 		obj = {
- 		 			time: time, 
- 		 			period: period,
- 		 			available: true
- 		 		}
+          obj = {
+           time: time, 
+           period: period,
+           available: true
+         }
 
- 		 		this.schedule.push(obj)
- 		 	}
+         this.schedule.push(obj)
+       }
 
- 		 }
- 		},
+     }
+   },
 
- 		mounted() {
- 			this.createSchelude()
- 		}
+   mounted() {
+    this.createSchelude()
+  }
 
- 	}
- </script>
+}
+</script>
 
- <style type="text/css">
- 	.component-fade-enter-active, .component-fade-leave-active {
- 		transition: opacity .3s ease;
- 	}
- 	.component-fade-enter, .component-fade-leave-to {
- 		opacity: 0;
- 	}
- </style>
+<style type="text/css">
+  .component-fade-enter-active, .component-fade-leave-active {
+   transition: opacity .3s ease;
+ }
+ .component-fade-enter, .component-fade-leave-to {
+   opacity: 0;
+ }
+</style>
