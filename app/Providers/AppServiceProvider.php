@@ -45,29 +45,19 @@ class AppServiceProvider extends ServiceProvider
         });
 
         /**
-         * Validate that the date of the appointment is greater than the current date
+         * Validate that the datetime of the appointment is greater than the current datetime.
          */
-        Validator::extend('date_appointment', function ($attribute, $value, $parameters, $validator) {
-            $current_date  = new DateTime('now');
-            $selected_date = new DateTime($value);
+        Validator::extend('datetime_appointment', function ($attribute, $value, $parameters, $validator) {
+            $current_datetime = new DateTime('now');            
+            $selected_date    = new DateTime($parameters[0]);        
+            $selected_date    = $selected_date->format('Y-m-d');
 
-            $current_date  = $current_date->format('Y-m-d');
-            $selected_date = $selected_date->format('Y-m-d');
+            if($current_datetime->format('Y-m-d') == $selected_date){
+                $selected_time = new DateTime($value);
+                return ($current_datetime->format('H') < $selected_time->format('H'));
+            }
 
-            return ($current_date <= $selected_date);
-        });
-
-        /**
-         * Validate that the time of the appointment is greater than the current date
-         */
-        Validator::extend('time_appointment', function ($attribute, $value, $parameters, $validator) {
-            $current_time  = new DateTime('now');
-            $selected_time = new DateTime($value);
-
-            $current_time  = $current_time->format('H');
-            $selected_time = $selected_time->format('H');
-
-            return ($current_time < $selected_time);
+            return ($current_datetime->format('Y-m-d') < $selected_date);
         });
     }
 

@@ -31,15 +31,15 @@ class AppointmentController extends Controller
     public function store(Request $request)
     {
         // $rules
-        // date_appointment, required, date format and custom validator date_week, custom validator date_appointment.
-        // time_appointment, required, Custom validator unique_with, custom validator time_appoinment, and regex the schedule must be set for office hours (9am to 6pm).
+        // date_appointment, required, date format and custom validator date_week.
+        // time_appointment, required, Custom validator unique_with, custom validator datetime_appointment, and regex the schedule must be set for office hours (9am to 6pm).
         // email, not null, required, email vwrify and unique in table.
         $rules = [
-            'date_appointment' => 'required|date|date_week|date_appointment',
+            'date_appointment' => 'required|date|date_week',
             'time_appointment' => [
                                     'required', 
                                     'unique_with:appointments,date_appointment,'.$request->date_appointment,
-                                    'time_appointment',
+                                    'datetime_appointment:'.$request->date_appointment,
                                     'regex:/(09|1[0-8]):00:00/'
                                     ],
             'email'            => 'nullable|required|email|unique:appointments',
@@ -47,11 +47,10 @@ class AppointmentController extends Controller
 
         //Custom message in response.
         $messages = [
-            'date_appointment.date_week'        => 'Sorry, Death only works in Monday to Friday.',
-            'time_appointment.regex'            => 'Sorry, Death only works in office hour (9am to 18pm).',
-            'date_appointment.date_appointment' => 'The chosen date is already over.',
-            'time_appointment.time_appointment' => 'The chosen time is already over.',
-            'email.unique'                      => 'The Death does not want anymore appointments with you.',
+            'date_appointment.date_week'            => 'Sorry, Death only works in Monday to Friday.',
+            'time_appointment.regex'                => 'Sorry, Death only works in office hour (9am to 18pm).',
+            'time_appointment.datetime_appointment' => 'The chosen time is already over.',
+            'email.unique'                          => 'The Death does not want anymore appointments with you.',
 
         ];
 
