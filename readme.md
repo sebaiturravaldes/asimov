@@ -2,7 +2,7 @@
 <p align="center">Application Challenge</p>
 <p align="center">Full-Stack Dev - Asimov Consultores</p>
 
-## Challenge Test Information
+## Challenge Test Information (Laravel + VueJS)
 - http://asimov.cl/site/templates/assets/files/challenge.pdf
 
 ## Demo
